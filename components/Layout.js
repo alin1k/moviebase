@@ -56,10 +56,10 @@ function Header() {
           >
             <MenuItem href="/search">Search</MenuItem>
             <MenuItem href="/" disabled>
-              Watchlist
+              Favorites
             </MenuItem>
             <MenuItem href="/" disabled>
-              History
+              Watched movies
             </MenuItem>
           </Stack>
 
