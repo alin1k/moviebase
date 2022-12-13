@@ -17,11 +17,11 @@ Informatiile despre filme sunt luate de pe [TMDB API](https://developers.themovi
 - Cauta filme
 - Vezi detalii despre filmele cautate
 - Adauga filme in categoria 'filme vizionate'
+- Rezultatele cautarii au poze si rating
 
 ## In Progress
 
 - Adauga filme in categoria 'favorite'
-- Rezultatele cautarii au poze si release date
 
 ## Run Locally
 
