@@ -15,9 +15,19 @@ import {
   VStack,
   Button,
   Badge,
+  SimpleGrid,
+  Card,
+  CardBody,
+  Image,
+  Box,
+  Stack,
+  Heading,
+  HStack
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import Layout from 'components/Layout';
+import {buildImageUrl} from 'utils/api.js'
+import { disconnect } from 'mongoose';
 
 function SearchBar() {
   const router = useRouter();
@@ -33,7 +43,7 @@ function SearchBar() {
   const handleSearch = (event) => {
     event.preventDefault();
     if (text !== terms) {
-      router.push(`/search/?terms=${text}`, undefined, { shallow: true });
+      router.push(`/search/?terms=${text}&page=1`, undefined, { shallow: true });
     }
   };
 
@@ -54,9 +64,11 @@ function SearchBar() {
     </InputGroup>
   );
 }
+
 function SearchResults() {
-  const { terms } = useRouter().query;
-  const { data, error } = useSWR(terms && `/api/search?terms=${terms}`);
+  const router = useRouter();
+  const { terms, page } = router.query;
+  const { data, error } = useSWR(terms && `/api/search?terms=${terms}&page=${page}`);
 
   if (!terms) {
     return <Text>Type some terms and submit for a quick search</Text>;
@@ -71,25 +83,55 @@ function SearchResults() {
   if (!data) {
     return <Progress size="xs" isIndeterminate />;
   }
-  if (!data.results.length) {
+  if(page==='0') {
+    router.push(`/search/?terms=${terms}&page=1`, undefined, { shallow: true });
+  };
+  if (!data.results?.length) {
     return <Text>No results</Text>;
   }
   return (
-    <UnorderedList stylePosition="inside">
-      {data.results.map(({ id, title, release_date }) => (
-        <ListItem key={id}>
-          <Link href={`/movies/${id}`} passHref legacyBehavior>
-            <Button
-              as="a"
-              variant="link"
-              rightIcon={<Badge>{release_date}</Badge>}
-            >
-              <Text as="span">{title} </Text>
-            </Button>
-          </Link>
-        </ListItem>
-      ))}
-    </UnorderedList>
+    <Stack>
+      <SimpleGrid columns={[2, 3, 4, 5]} gap={4}>
+        {data.results.map(({ id, title, release_date, poster_path, vote_average }) => (
+            <Link href={`/movies/${id}`} passHref legacyBehavior key={id}>
+              <Card boxShadow='md' textAlign="center" style={{cursor: 'pointer'}} _hover={{bg: 'purple.500'}}>
+                <CardBody>
+                  {poster_path !== null?
+                    <Image
+                      src={buildImageUrl(poster_path)}
+                    />
+                  :
+                    null
+                  }
+                  <Heading size={['sm', 'md']} my='1rem'>{title}</Heading>
+                  <Text>Rating: <Badge colorScheme="green" variant="outline">{vote_average}</Badge></Text>
+                </CardBody>
+              </Card>
+            </Link>
+        ))}
+      </SimpleGrid>
+
+      <HStack>
+        <Button
+          disabled={page === '1'}
+          onClick={()=>{
+            const nextPage = parseInt(page) - 1;
+            router.push(`/search/?terms=${terms}&page=${nextPage}`, undefined, { shallow: true })
+          }}
+        >
+          Previous Page
+        </Button>
+        <Button
+          disabled={page >= data.total_pages}
+          onClick={()=>{
+            const nextPage = parseInt(page) + 1;
+            router.push(`/search/?terms=${terms}&page=${nextPage}`, undefined, { shallow: true })
+          }}
+        >
+          Next Page
+        </Button>
+      </HStack>
+    </Stack>
   );
 }
 
@@ -97,7 +139,7 @@ export default function Search() {
   return (
     <Layout title="Search">
       <Container>
-        <VStack spacing={4} align="stretch">
+        <VStack spacing={4} align="stretch" mb='2rem'>
           <SearchBar />
           <SearchResults />
         </VStack>

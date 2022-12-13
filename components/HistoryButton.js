@@ -4,9 +4,8 @@ import { useRouter } from 'next/router';
 import useSWR, { useSWRConfig } from 'swr';
 import { fetcher } from 'utils/api';
 
-export default function HistoryButton(props) {
+export default function HistoryButton() {
   let{ id } = useRouter().query;
-  if(id === undefined) id = props.id;
   const { data } = useSWR(`/api/history/${id}`);
   const { mutate } = useSWRConfig();
 

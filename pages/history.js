@@ -36,12 +36,12 @@ export function HistoryContent(){
     }
 
     return(
-        <Box>
+        <Box mb='2rem'>
             <Heading as='h1' textAlign='center' mb='2rem'>Your watched movies</Heading>
             {data.length ? 
                 <SimpleGrid columns={[1, 2, 3, 4]} gap={4}>
                     {data.map(val=>
-                        <Card boxShadow='md' textAlign="center">
+                        <Card boxShadow='md' textAlign="center" key={val.id}>
                             <CardBody>
                                 <Image
                                 src={buildImageUrl(val.poster)}
