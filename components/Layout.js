@@ -58,7 +58,7 @@ function Header() {
             <MenuItem href="/" disabled>
               Favorites
             </MenuItem>
-            <MenuItem href="/" disabled>
+            <MenuItem href="/history">
               Watched movies
             </MenuItem>
           </Stack>

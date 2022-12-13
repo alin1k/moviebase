@@ -4,20 +4,21 @@ import { useRouter } from 'next/router';
 import useSWR, { useSWRConfig } from 'swr';
 import { fetcher } from 'utils/api';
 
-export default function HistoryButton() {
-  const { id } = useRouter().query;
+export default function HistoryButton(props) {
+  let{ id } = useRouter().query;
+  if(id === undefined) id = props.id;
   const { data } = useSWR(`/api/history/${id}`);
   const { mutate } = useSWRConfig();
 
   return (
-    <Tooltip label={data?.found ? 'Remove from history' : 'Add to history'}>
+    <Tooltip label={data?.found ? 'Remove from wathecd movies' : 'Add to wathecd movies'}>
       <IconButton
         isLoading={!data}
         colorScheme={data?.found ? 'purple' : 'gray'}
         size="sm"
-        onClick={() => {
-          mutate(`/api/history/${id}`, () =>
-            fetcher(`/api/history/${id}`, {
+        onClick={async () => {
+          await mutate(`/api/history/${id}`, async () =>
+            await fetcher(`/api/history/${id}`, {
               method: data.found ? 'DELETE' : 'PUT',
             })
           );

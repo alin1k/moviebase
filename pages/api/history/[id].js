@@ -21,8 +21,10 @@ export default async function handler(req, res) {
     }
   } else if (method === 'PUT') {
     const movie = await fetcher(getMovieUrl(id));
+    console.log(movie.poster_path);
 
-    const history = new History({ id, title: movie.title });
+    const history = new History({ id, title: movie.title, poster: movie.poster_path});
+    console.log(history);
     await history.save();
 
     res.status(200).json({ found: true });
