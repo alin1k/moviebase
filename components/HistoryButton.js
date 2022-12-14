@@ -18,7 +18,7 @@ export default function HistoryButton() {
         onClick={async () => {
           await mutate(`/api/history/${id}`, async () =>
             await fetcher(`/api/history/${id}`, {
-              method: data.found ? 'DELETE' : 'PUT',
+              method: data.found ? 'DELETE' : 'POST',
             })
           );
         }}

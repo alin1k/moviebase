@@ -6,6 +6,7 @@ import { buildImageUrl } from 'utils/api';
 import {
   Badge,
   Box,
+  Button,
   Center,
   CircularProgress,
   Container,
@@ -17,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import Layout from 'components/Layout';
 import HistoryButton from 'components/HistoryButton';
+import WatchListButton from 'components/WatchListButton';
 
 const MovieContent = () => {
   const { id } = useRouter().query;
@@ -77,6 +79,9 @@ const MovieContent = () => {
           ))}
         </Stack>
         <Box>{data.overview}</Box>
+        <HStack>
+          <WatchListButton/>
+        </HStack>
       </Stack>
     </Stack>
   );

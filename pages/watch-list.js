@@ -1,25 +1,24 @@
-import Link from "next/link";
-import Layout from "components/Layout.js";
 import { 
-    Center, 
-    Heading, 
-    CircularProgress, 
+    Text, 
     Container,
+    Center,
+    Heading,
+    CircularProgress,
     Box,
-    Card, CardHeader, CardBody, 
-    Stack,
+    Card, CardBody,
     SimpleGrid,
-    Image,
-    Button
-} from '@chakra-ui/react';
+    Image, 
+    Button,
+} from "@chakra-ui/react"
+import Link from "next/link";
+import Layout from "components/Layout"
 import useSWR from 'swr';
 import { fetcher } from "utils/api.js";
 import { buildImageUrl } from "utils/api.js";
-import Head from "next/head";
 
-export function HistoryContent(){
-    const {data, error} = useSWR('/api/history', fetcher);
-    
+function WatchListContent(){
+    const {data, error} = useSWR('/api/watch-list', fetcher);
+
     if(error){
         return(
             <Center h="full">
@@ -37,7 +36,7 @@ export function HistoryContent(){
 
     return(
         <Box mb='2rem'>
-            <Heading as='h1' textAlign='center' mb='2rem'>Your watched movies</Heading>
+            <Heading as='h1' textAlign='center' mb='2rem'>Your watch list</Heading>
             {data.length ? 
                 <SimpleGrid columns={[1, 2, 3, 4]} gap={4}>
                     {data.map(val=>
@@ -64,11 +63,10 @@ export function HistoryContent(){
 }
 
 export default function Page(){
-
     return(
-        <Layout title="History">
-            <Container h="full">
-                <HistoryContent />
+        <Layout title="Watch List">
+            <Container h='full'>
+                <WatchListContent/>
             </Container>
         </Layout>
     )

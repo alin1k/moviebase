@@ -91,7 +91,7 @@ function SearchResults() {
   }
   return (
     <Stack>
-      <SimpleGrid columns={[2, 3, 4, 5]} gap={4}>
+      <SimpleGrid columns={[2, 3, 4, 5]} gap={4} mb='2rem'>
         {data.results.map(({ id, title, release_date, poster_path, vote_average }) => (
             <Link href={`/movies/${id}`} passHref legacyBehavior key={id}>
               <Card boxShadow='md' textAlign="center" style={{cursor: 'pointer'}} _hover={{bg: 'purple.500'}}>
@@ -103,7 +103,7 @@ function SearchResults() {
                   :
                     null
                   }
-                  <Heading size={['sm', 'md']} my='1rem'>{title}</Heading>
+                  <Heading size={['sm', 'md']} my='1rem'>{(title.length > 25) ? title.slice(0, 25-1) + '...' : title}</Heading>
                   <Text>Rating: <Badge colorScheme="green" variant="outline">{vote_average}</Badge></Text>
                 </CardBody>
               </Card>
@@ -111,7 +111,7 @@ function SearchResults() {
         ))}
       </SimpleGrid>
 
-      <HStack>
+      <HStack justify='center'>
         <Button
           disabled={page === '1'}
           onClick={()=>{
