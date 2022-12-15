@@ -1,5 +1,6 @@
 import { fetcher } from 'utils/api';
 import History from 'models/History';
+import WatchList from 'models/WatchList';
 import dbConnect from 'utils/dbConnect';
 
 const getMovieUrl = (id) =>

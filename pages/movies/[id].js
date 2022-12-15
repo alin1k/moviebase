@@ -17,8 +17,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Layout from 'components/Layout';
-import HistoryButton from 'components/HistoryButton';
-import WatchListButton from 'components/WatchListButton';
+import MovieButtons from 'components/MovieButtons';
 
 const MovieContent = () => {
   const { id } = useRouter().query;
@@ -47,9 +46,6 @@ const MovieContent = () => {
         <title>{data.title}</title>
       </Head>
       <Box minW="300px" pos="relative">
-        <HStack pos="absolute" zIndex={1} top={2} right={2}>
-          <HistoryButton />
-        </HStack>
         <Image
           src={buildImageUrl(data.poster_path, 'w300')}
           alt="Movie poster"
@@ -79,9 +75,7 @@ const MovieContent = () => {
           ))}
         </Stack>
         <Box>{data.overview}</Box>
-        <HStack>
-          <WatchListButton/>
-        </HStack>
+        <MovieButtons/>
       </Stack>
     </Stack>
   );
