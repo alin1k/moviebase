@@ -15,13 +15,15 @@ Informatiile despre filme sunt luate de pe [TMDB API](https://developers.themovi
 ## Features
 
 - Cauta filme
+- Rezultatele cautarii au poze si rating
 - Vezi detalii despre filmele cautate
 - Adauga filme in categoria 'filme vizionate'
-- Rezultatele cautarii au poze si rating
+- Adauga filme in 'watch list'
+- Recomandare filme in functie de genurile filmelor vizionate si din watch list. [Vezi explicatie algoritm](#algoritm-recomandare-filme-in-functie-de-gen)
 
 ## In Progress
 
-- Adauga filme in categoria 'favorite'
+- Recomandare filme din categorii
 
 ## Run Locally
 
@@ -55,3 +57,33 @@ Porneste serverul local
   npm run dev
 ```
 
+## Algoritm Recomandare filme in functie de gen
+
+Algoritmul ia toate genurile filmelor salvate in watch list si in history (filme vizionate) si genereaza un array in care adauga 1 punct pentru fiecare gen al unui film din watch list si 2 puncte pentru fiecare gen al unui film din history. La final se sorteaza array-ul descrescator in functie de puncte si cauta prin TMDB API `/discover/movie?with_genres=<genresIds>` filme recomandate care contin ID-ul primelor 3 genuri cu cele mai multe puncte. 
+
+Exemplu array dupa parcurgerea algoritmului:
+
+```javascript
+[
+ {
+     id: 1,
+     name: "genreExample1",
+     points: 6
+ },
+ {
+     id: 2,
+     name: "genreExample2",
+     points: 5
+ },
+ {
+     id: 3,
+     name: "genreExample3",
+     points 3
+ },
+ {
+     id: 4,
+     name: "genreExample4",
+     points: 2
+ }
+]
+```
