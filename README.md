@@ -78,7 +78,7 @@ Exemplu array dupa parcurgerea algoritmului:
  {
      id: 3,
      name: "genreExample3",
-     points 3
+     points: 3
  },
  {
      id: 4,
@@ -87,3 +87,5 @@ Exemplu array dupa parcurgerea algoritmului:
  }
 ]
 ```
+Raspunsul API-ului il salvam in alt array apoi din acel array scoatem filmele deja vizionate si trimitem acest raspuns prin `res.json()`.
+
