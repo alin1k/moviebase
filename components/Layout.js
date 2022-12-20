@@ -33,7 +33,7 @@ function Header() {
           direction={['column', , 'row']}
           justify="space-between"
           wrap="wrap"
-          py="1.5rem"
+          py="1rem"
         >
           <HStack justify="space-between">
             <MenuItem href="/" mr={8}>

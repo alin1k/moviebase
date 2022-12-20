@@ -5,11 +5,16 @@ export default async function handler(req, res) {
     await dbConnect();
 
     const { method } = req;
+    const { count } = req.query;
 
     switch (method) {
         case 'GET':
             try {
-                const watchList = await WatchList.find({});
+                let watchList = await WatchList.find({});
+
+                if(count){
+                    watchList = watchList.splice(0, count);
+                }
 
                 res.status(200).json(watchList);
             } catch (error) {

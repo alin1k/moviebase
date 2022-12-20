@@ -52,14 +52,16 @@ export default async function handler(req, res) {
                         const {genres} = await fetcher(getMovieUrl(movie.id));
                         genresArray = await getGenresArray(genresArray, genres, 1);
                     };
-                    genres = [genresArray[0].id, genresArray[1].id, genresArray[2].id].join(',');
+                    genres = [genresArray[0].id, genresArray[1].id, genresArray[2].id].join('|');
                 }else{
                     genres = [];
                 }
 
                 let {results: page1} = await fetcher(discoverByGenresURL(genres, 1));
-                let {results: page2} = await fetcher(discoverByGenresURL(genres, 2));
-                const results = [...page1, ...page2];
+                // let {results: page2} = await fetcher(discoverByGenresURL(genres, 2));
+                // const results = [...page1, ...page2];
+                const results = [...page1];
+
                 
                 let discover = [];
 
@@ -67,7 +69,6 @@ export default async function handler(req, res) {
                     const [watchedMovie] = await History.find({id: result.id});
                     
                     if(!watchedMovie){
-                        console.log(result.original_title);
                         discover.push(result);
                     }
                 }

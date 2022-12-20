@@ -8,9 +8,9 @@ import {
   SimpleGrid,
   Card, CardBody,
   Image,
-  Show,
   Button,
-  HStack
+  HStack,
+  VStack
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import Layout from 'components/Layout';
@@ -26,21 +26,24 @@ function DiscoverGenres(){
   if(error){
     return(
       <Center h='full'>
-        <Heading size='md'>Something went wrong</Heading>
+        <Heading size='md'>Something went wrong with you recomendations</Heading>
       </Center>
     )
   }
   if(!data){
     return(
-      <Center h='full'>
-        <CircularProgress isIndeterminate />
+      <Center h='full' mb='2rem'>
+        <VStack>
+          <CircularProgress isIndeterminate />
+          <Text>Recommendations are loading...</Text>
+        </VStack>
       </Center>
     )
   }
 
   return(
-    <Box mb='2rem'>
-      <Heading as='h1' textAlign='center' mb='2rem'>Recommended based on movies you watched</Heading>
+    <Box>
+      <Heading as='h1' mb='2rem'>Recommended movies</Heading>
       <SimpleGrid columns={[1, 2, 3, 4]} gap={4} mb='2rem'>
         {data?.map((val, index)=>
             index < display ?
@@ -61,7 +64,6 @@ function DiscoverGenres(){
       </SimpleGrid>
       <HStack justify='center'>
         <Button
-          
           disabled={display === data.length}
           onClick={()=>{
             if(display+5 > data.length){
@@ -76,11 +78,65 @@ function DiscoverGenres(){
   )
 }
 
+function WatchList(){
+  let {data, error} = useSWR('/api/watch-list?count=4', fetcher);
+
+    if(error){
+        return(
+            <Center h="full">
+                <Heading as='h2'>Something went wrong. Try again later</Heading>
+            </Center>
+        ) 
+    } 
+    if(!data){
+        return(
+          <VStack>
+            <CircularProgress isIndeterminate />
+            <Text>Watch list is loading...</Text>
+          </VStack>
+        )
+    }
+
+    return(
+        <Box>
+          {data.length ? 
+            <Box mb='2rem'>
+            <Heading as='h1' mb='2rem'>Watch the movies you saved</Heading>
+              <SimpleGrid columns={[1, 2, 3, 4]} gap={4} mb='2rem'>
+                  {data.map(val=>
+                      <Link href={`/movies/${val.id}`} passHref legacyBehavior key={val.id}>
+                          <Card boxShadow='md' textAlign="center" style={{cursor: 'pointer'}} _hover={{bg: 'purple.500'}}>
+                              <CardBody>
+                                  <Image
+                                  src={buildImageUrl(val.poster)}
+                                  alt={val.title + " poster image"}
+                                  />
+                                  <Heading my="1rem" size="md">{val.title}</Heading>
+                              </CardBody>
+                          </Card>
+                      </Link>
+                  )}
+              </SimpleGrid>
+            </Box>
+          :
+              null
+          }
+        </Box>
+    )
+}
+
 export default function Home() {
   return (
     <Layout title="Homepage">
       <Container h="full">
-        <DiscoverGenres/>
+        <VStack>
+          <Text fontSize='8xl' fontWeight='extrabold'
+            bgGradient='linear(180deg, rgba(128,90,213,1) 40%, rgba(252,70,236,1) 100%)'
+            bgClip='text'
+          >MOVIEBASE</Text>
+          <DiscoverGenres/>
+          <WatchList/>
+        </VStack>
       </Container>
     </Layout>
   );
