@@ -6,8 +6,6 @@ import {
   Input,
   IconButton,
   Container,
-  UnorderedList,
-  ListItem,
   Progress,
   Text,
   InputGroup,
@@ -22,12 +20,12 @@ import {
   Box,
   Stack,
   Heading,
-  HStack
+  HStack,
+  Center
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import Layout from 'components/Layout';
 import {buildImageUrl} from 'utils/api.js'
-import { disconnect } from 'mongoose';
 
 function SearchBar() {
   const router = useRouter();
@@ -48,20 +46,24 @@ function SearchBar() {
   };
 
   return (
-    <InputGroup as="form" onSubmit={handleSearch}>
-      <Input
-        placeholder="Search for a movie..."
-        value={text}
-        onChange={(event) => setText(event.target.value)}
-      />
-      <InputRightElement>
-        <IconButton
-          aria-label="Search for a movie"
-          icon={<SearchIcon />}
-          type="submit"
+    <Box>
+      <Heading as='h2' my='1rem'>Search movies</Heading>
+      <InputGroup as="form" onSubmit={handleSearch}>
+        <Input
+          autoFocus='true'
+          placeholder="Search for a movie..."
+          value={text}
+          onChange={(event) => setText(event.target.value)}
         />
-      </InputRightElement>
-    </InputGroup>
+        <InputRightElement>
+          <IconButton
+            aria-label="Search for a movie"
+            icon={<SearchIcon />}
+            type="submit"
+          />
+        </InputRightElement>
+      </InputGroup>
+    </Box>
   );
 }
 
@@ -135,11 +137,43 @@ function SearchResults() {
   );
 }
 
+function Genres(){
+  const {data, error} = useSWR('/api/genres');
+
+  if(error){
+    return(
+      <Center h='full'>
+        <Text>There was an error while loading genres please try again later</Text>
+      </Center>
+    )
+  }
+  if(!data){
+    return(
+      <Center h='full'>
+        <Text>There was an error while loading genres please try again later</Text>
+      </Center>
+    )
+  }
+
+  return(
+    <Box>
+      <Heading as='h2' my='1rem'>Discover movies</Heading>
+        {data?.map(genre=>(
+          <Link href={`/search/${genre.id}?page=1`} passHref key={genre.id}>
+            <Button mr='0.5rem' mb='0.5rem'>{genre.name}</Button>
+          </Link>
+        ))}
+    </Box>
+  )
+
+}
+
 export default function Search() {
   return (
     <Layout title="Search">
       <Container>
         <VStack spacing={4} align="stretch" mb='2rem'>
+          <Genres/>
           <SearchBar />
           <SearchResults />
         </VStack>

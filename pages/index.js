@@ -20,7 +20,7 @@ import { buildImageUrl } from 'utils/api';
 import { useState } from 'react';
 
 function DiscoverGenres(){
-  const {data, error} = useSWR('/api/genres', fetcher);
+  const {data, error} = useSWR('/api/discover-genres', fetcher);
   const [display, setDisplay] = useState(8);
 
   if(error){

@@ -1,81 +1,37 @@
-import History from "models/History";
-import WatchList from "models/WatchList";
-import { fetcher } from "utils/api";
 import dbConnect from "utils/dbConnect";
+import { fetcher } from "utils/api";
 
-const getMovieUrl = (id) =>
-  `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}`;
+const genresUrl = `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.TMDB_API_KEY}`
 
-const discoverByGenresURL = (genres, page) =>
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&sort_by=popularity.desc&with_genres=${genres}&page=${page}`
-
-const getGenresArray = (genresArray, genres, pointsVal) => {
-    for(let genre of genres){
-        const [genreExists] = genresArray.filter(val => val.id === genre.id);
-        if(!genreExists){
-            genresArray.push({...genre, points: pointsVal});
-        }else{
-            genresArray = genresArray.map(val=>{
-                if(val.id == genre.id){
-                    return {...val, points: genreExists.points + pointsVal};
-                }else{
-                    return {...val};
-                }
-            })
-        }
-    }
-    genresArray = genresArray.sort((a, b) => (a.points < b.points) ? 1 : -1);
-
-    return genresArray;
-}
+const getGenreMoviesUrl = (id, page) =>
+    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&with_genres=${id}&page=${page}&sort_by=popularity.desc&include_adult=false`
 
 export default async function handler(req, res) {
     await dbConnect();
 
-    const { method } = req;
+    const {method} = req;
+    const {id, page} = req.query;
 
     switch (method) {
         case 'GET':
-            try {
-                const history = await History.find({});
-                const watchList = await WatchList.find({});
-                let genresArray = [];
-                let genres = [];
+            if(id){
+                try {
+                    const results = await fetcher(getGenreMoviesUrl(id,page));
+                    console.log(results);
+                    console.log(results.total_pages);
 
-                if(history.length && watchList.length){
-                    for(let movie of history){
-                        const {genres} = await fetcher(getMovieUrl(movie.id));
-                        genresArray = await getGenresArray(genresArray, genres, 2);
-                    };
-    
-                    for(let movie of watchList){
-                        const {genres} = await fetcher(getMovieUrl(movie.id));
-                        genresArray = await getGenresArray(genresArray, genres, 1);
-                    };
-                    genres = [genresArray[0].id, genresArray[1].id, genresArray[2].id].join('|');
-                }else{
-                    genres = [];
+                    res.status(200).json(results);
+                } catch (error) {
+                    res.status(400).json({message: error.message});
                 }
-
-                let {results: page1} = await fetcher(discoverByGenresURL(genres, 1));
-                // let {results: page2} = await fetcher(discoverByGenresURL(genres, 2));
-                // const results = [...page1, ...page2];
-                const results = [...page1];
-
-                
-                let discover = [];
-
-                for(let result of results){
-                    const [watchedMovie] = await History.find({id: result.id});
-                    
-                    if(!watchedMovie){
-                        discover.push(result);
-                    }
+            }else{
+                try {
+                    const {genres} = await fetcher(genresUrl);
+        
+                    res.status(200).json(genres);
+                } catch (error) {
+                    res.status(400).json({message: error.message});
                 }
-    
-                res.status(200).json(discover);
-            } catch (error) {
-                res.status(400).json({message: error.message});
             }
             break;
     
