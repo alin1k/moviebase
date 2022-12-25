@@ -50,7 +50,7 @@ function SearchBar() {
       <Heading as='h2' my='1rem'>Search movies</Heading>
       <InputGroup as="form" onSubmit={handleSearch}>
         <Input
-          autoFocus='true'
+          autoFocus={true}
           placeholder="Search for a movie..."
           value={text}
           onChange={(event) => setText(event.target.value)}
@@ -106,7 +106,7 @@ function SearchResults() {
                     null
                   }
                   <Heading size={['sm', 'md']} my='1rem'>{(title.length > 25) ? title.slice(0, 25-1) + '...' : title}</Heading>
-                  <Text>Rating: <Badge colorScheme="green" variant="outline">{vote_average}</Badge></Text>
+                  <Text>Rating: <Badge colorScheme={vote_average > 8 ? 'green' : vote_average > 5 ? 'yellow' : 'red'} variant="outline">{vote_average}</Badge></Text>
                 </CardBody>
               </Card>
             </Link>

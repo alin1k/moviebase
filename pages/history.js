@@ -66,7 +66,7 @@ export function HistoryContent(){
 export default function Page(){
 
     return(
-        <Layout title="History">
+        <Layout title="Watched movies">
             <Container h="full">
                 <HistoryContent />
             </Container>

@@ -91,7 +91,7 @@ function GenreContent(){
 
 export default function Page(){
     return (
-        <Layout>
+        <Layout title='Discover movies'>
             <Container h="full">
                 <GenreContent />
             </Container>

@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import Layout from 'components/Layout';
 import MovieButtons from 'components/MovieButtons';
+import Link from 'next/link';
 
 const MovieContent = () => {
   const { id } = useRouter().query;
@@ -69,13 +70,21 @@ const MovieContent = () => {
 
         <Stack direction="row">
           {data.genres?.map((genre) => (
-            <Badge key={genre.id} colorScheme="purple" variant="outline">
-              {genre.name}
-            </Badge>
+            <Link passHref legacyBehavior key={genre.id} href={`/search/${genre.id}?page=1`}>
+              <Badge colorScheme="purple" variant="outline"  _hover={{ cursor: 'pointer' }}>
+                {genre.name}
+              </Badge>
+            </Link>
           ))}
         </Stack>
+        <Text>Rating: <Badge colorScheme={data.vote_average > 8 ? 'green' : data.vote_average > 5 ? 'yellow' : 'red'} variant="solid" fontSize='1rem'>{data.vote_average}</Badge></Text>
+        <Text>Runtime: {data.runtime} min</Text>
         <Box>{data.overview}</Box>
-        <MovieButtons/>
+        {data.status === 'Released'?
+          <MovieButtons/>
+        :
+          <Heading color={'red.600'}>THIS MOVIE IS UNRELEASED</Heading>
+        }
       </Stack>
     </Stack>
   );

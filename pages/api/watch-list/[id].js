@@ -31,7 +31,6 @@ export default async function handler(req, res) {
             const {title, poster_path} = await fetcher(getMovieUrl(id));
 
             const watchList = new WatchList({id, title, poster: poster_path});
-            console.log(watchList);
             await watchList.save();
 
             res.status(200).json(watchList);

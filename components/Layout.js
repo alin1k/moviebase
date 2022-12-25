@@ -36,7 +36,7 @@ function Header() {
           py="1rem"
         >
           <HStack justify="space-between">
-            <MenuItem href="/" mr={8}>
+            <MenuItem href="/" mr={8}  _hover={{ color: 'purple.300' }}>
               <Heading size="lg">Moviebase</Heading>
             </MenuItem>
 
@@ -52,24 +52,16 @@ function Header() {
             justify="start"
             align={['start', , 'center']}
             display={[isOpen ? 'flex' : 'none', , 'flex']}
-            spacing={4}
+            spacing={10}
           >
-            <MenuItem href="/search">Search</MenuItem>
-            <MenuItem href="/watch-list">
+            <MenuItem href="/search" _hover={{ color: 'purple.300' }}>Search</MenuItem>
+            <MenuItem href="/watch-list" _hover={{ color: 'purple.300' }}>
               Watch List
             </MenuItem>
-            <MenuItem href="/history">
+            <MenuItem href="/history" _hover={{ color: 'purple.300' }}>
               Watched movies
             </MenuItem>
           </Stack>
-
-          <Spacer />
-
-          <Box display={[isOpen ? 'block' : 'none', , 'block']}>
-            <MenuItem href="/" variant="outline" disabled>
-              What to watch
-            </MenuItem>
-          </Box>
         </Stack>
       </Container>
     </Box>

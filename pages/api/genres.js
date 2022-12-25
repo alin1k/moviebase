@@ -17,8 +17,6 @@ export default async function handler(req, res) {
             if(id){
                 try {
                     const results = await fetcher(getGenreMoviesUrl(id,page));
-                    console.log(results);
-                    console.log(results.total_pages);
 
                     res.status(200).json(results);
                 } catch (error) {

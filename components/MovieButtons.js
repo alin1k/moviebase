@@ -9,7 +9,6 @@ function WatchListButton(){
     const {data: history} = useSWR(`/api/history/${id}`);
     const { mutate } = useSWRConfig();
 
-    console.log(history);
     return(
         <Box>
             {! history?.found ? 
@@ -18,7 +17,7 @@ function WatchListButton(){
                     colorScheme={data?.found ? 'purple' : 'gray'}
                     onClick={async ()=>{
                         await mutate(`/api/watch-list/${id}`, async () =>
-                            await fetcher(`/api/watch-list/${id}`, {method: data.found ? 'DELETE' : 'POST',}).then(console.log)
+                            await fetcher(`/api/watch-list/${id}`, {method: data.found ? 'DELETE' : 'POST',})
                         )
                     }}
                 >
@@ -42,11 +41,11 @@ function HistoryButton() {
           colorScheme={data?.found ? 'purple' : 'gray'}
           onClick={async ()=>{
               await mutate(`/api/history/${id}`, async () =>
-                  await fetcher(`/api/history/${id}`, {method: data.found ? 'DELETE' : 'POST',}).then(console.log)
+                  await fetcher(`/api/history/${id}`, {method: data.found ? 'DELETE' : 'POST',})
               ).then(async ()=>{
                 if(!data.found){
                     await mutate(`/api/watch-list/${id}`, async () =>
-                        await fetcher(`/api/watch-list/${id}`, {method: 'DELETE',}).then(console.log)
+                        await fetcher(`/api/watch-list/${id}`, {method: 'DELETE',})
                     )
                 }
               })
