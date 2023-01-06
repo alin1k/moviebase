@@ -44,20 +44,20 @@ export default async function handler(req, res) {
 
                 if(history.length && watchList.length){
                     for(let movie of history){
-                        const {genres} = await fetcher(getMovieUrl(movie.id));
-                        genresArray = await getGenresArray(genresArray, genres, 2);
+                        const {genres: movieGenres} = await fetcher(getMovieUrl(movie.id));
+                        genresArray = await getGenresArray(genresArray, movieGenres, 2);
                     };
     
                     for(let movie of watchList){
-                        const {genres} = await fetcher(getMovieUrl(movie.id));
-                        genresArray = await getGenresArray(genresArray, genres, 1);
+                        const {genres: movieGenres} = await fetcher(getMovieUrl(movie.id));
+                        genresArray = await getGenresArray(genresArray, movieGenres, 1);
                     };
-                    genres = [genresArray[0].id, genresArray[1].id, genresArray[2].id].join('|');
+                    genres = [genresArray[0].id, genresArray[1].id, genresArray[2].id];
                 }else{
                     genres = [];
                 }
 
-                let {results: page1} = await fetcher(discoverByGenresURL(genres, 1));
+                let {results: page1} = await fetcher(discoverByGenresURL(genres.join(','), 1));
                 // let {results: page2} = await fetcher(discoverByGenresURL(genres, 2));
                 // const results = [...page1, ...page2];
                 const results = [...page1];

@@ -23,7 +23,7 @@ Informatiile despre filme sunt luate de pe [TMDB API](https://developers.themovi
 
 ## In Progress
 
-- Recomandare filme din categorii
+- Recomandare filme din colectii
 
 ## Run Locally
 

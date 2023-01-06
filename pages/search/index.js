@@ -21,7 +21,8 @@ import {
   Stack,
   Heading,
   HStack,
-  Center
+  Center,
+  CircularProgress
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import Layout from 'components/Layout';
@@ -150,7 +151,7 @@ function Genres(){
   if(!data){
     return(
       <Center h='full'>
-        <Text>There was an error while loading genres please try again later</Text>
+        <CircularProgress/>
       </Center>
     )
   }
